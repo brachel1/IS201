@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku</title>
+    <style>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+h1 {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(9, 40px);
+    grid-template-rows: repeat(9, 40px);
+    justify-content: center;
+    gap: 0;
+    border: none;
+    margin: auto; /* Center horizontally */
+    background-color: white;
+}
+
+    .cell {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+        text-align: center;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+    .cell[disabled] {
+        background-color: #e0e0e0;
+        color: black;
+        text-align: center;
+    }
+
+    /* Add thick vertical lines */
+    .cell:nth-child(3n) {
+        border-right: 3px solid black;
+    }
+    .cell:nth-child(9n + 1) {
+        border-left: 3px solid black;
+    }
+
+    /* Add thick horizontal lines */
+    .cell:nth-child(n + 1):nth-child(-n + 9),
+    .cell:nth-child(n + 28):nth-child(-n + 36),
+    .cell:nth-child(n + 55):nth-child(-n + 63) {
+        border-top: 3px solid black;
+    }
+    .cell:nth-child(n + 73):nth-child(-n + 81) {
+        border-bottom: 3px solid black;
+    }
+    .controls {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;
+    gap: 10px; /* Add spacing between buttons */
+    margin-top: 20px;
+}
+    button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+        }
+</style>
+
+</head>
+<body>
+    <h1>Sudoku</h1>
+    <div id="grid" class="grid"></div>
+    <div class="controls">
+        <button onclick="checkSolution()">Check Solution</button>
+        <button onclick="resetPuzzle()">Reset</button>
+        <button onclick="newGame()">New Game</button>
+    </div>
+
+    <script>
+        const gridElement = document.getElementById('grid');
+
+        // Generate a new Sudoku puzzle (static example for now).
+        let puzzle = [
+            [5, 3, 0, 0, 7, 0, 0, 0, 0],
+            [6, 0, 0, 1, 9, 5, 0, 0, 0],
+            [0, 9, 8, 0, 0, 0, 0, 6, 0],
+            [8, 0, 0, 0, 6, 0, 0, 0, 3],
+            [4, 0, 0, 8, 0, 3, 0, 0, 1],
+            [7, 0, 0, 0, 2, 0, 0, 0, 6],
+            [0, 6, 0, 0, 0, 0, 2, 8, 0],
+            [0, 0, 0, 4, 1, 9, 0, 0, 5],
+            [0, 0, 0, 0, 8, 0, 0, 7, 9]
+        ];
+
+        let solution = [...puzzle]; // Deep copy for the solution.
+
+        // Create the grid.
+        function createGrid() {
+            gridElement.innerHTML = '';
+
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    const cell = document.createElement('input');
+                    cell.type = 'text';
+                    cell.maxLength = 1;
+                    cell.classList.add('cell');
+                    if (puzzle[row][col] !== 0) {
+                        cell.value = puzzle[row][col];
+                        cell.disabled = true;
+                    }
+                    cell.dataset.row = row;
+                    cell.dataset.col = col;
+                    gridElement.appendChild(cell);
+                }
+            }
+        }
+
+        // Check the solution.
+        function checkSolution() {
+            const cells = document.querySelectorAll('.cell');
+            let correct = true;
+
+            cells.forEach(cell => {
+                const row = cell.dataset.row;
+                const col = cell.dataset.col;
+                const value = parseInt(cell.value, 10);
+                if (value !== solution[row][col]) {
+                    correct = false;
+                }
+            });
+
+            if (correct) {
+                alert('Congratulations! You solved it!');
+            } else {
+                alert('Incorrect solution! Keep trying.');
+            }
+        }
+
+        // Reset the puzzle.
+        function resetPuzzle() {
+            createGrid();
+        }
+
+        // Generate a new game (placeholder).
+        function newGame() {
+            alert('New game feature coming soon!');
+            // For now, just reset the existing grid.
+            resetPuzzle();
+        }
+
+        // Initialize the grid.
+        createGrid();
+    </script>
+</body>
+</html>
